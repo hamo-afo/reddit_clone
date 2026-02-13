@@ -21,8 +21,6 @@ class UserModel {
     required this.awards,
   });
 
-
-
   UserModel copyWith({
     String? name,
     String? profilePic,
@@ -63,12 +61,9 @@ class UserModel {
       uid: map['uid'] as String,
       isAuthenticated: map['isAuthenticated'] as bool,
       karma: map['karma'] as int,
-      awards: List<String>.from((map['awards'] as List<String>),
-    ),
+      awards: (map['awards'] as List<dynamic>).cast<String>(),
     );
   }
-
-  
 
   @override
   String toString() {
@@ -78,25 +73,24 @@ class UserModel {
   @override
   bool operator ==(covariant UserModel other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.name == name &&
-      other.profilePic == profilePic &&
-      other.banner == banner &&
-      other.uid == uid &&
-      other.isAuthenticated == isAuthenticated &&
-      other.karma == karma &&
-      listEquals(other.awards, awards);
+
+    return other.name == name &&
+        other.profilePic == profilePic &&
+        other.banner == banner &&
+        other.uid == uid &&
+        other.isAuthenticated == isAuthenticated &&
+        other.karma == karma &&
+        listEquals(other.awards, awards);
   }
 
   @override
   int get hashCode {
     return name.hashCode ^
-      profilePic.hashCode ^
-      banner.hashCode ^
-      uid.hashCode ^
-      isAuthenticated.hashCode ^
-      karma.hashCode ^
-      awards.hashCode;
+        profilePic.hashCode ^
+        banner.hashCode ^
+        uid.hashCode ^
+        isAuthenticated.hashCode ^
+        karma.hashCode ^
+        awards.hashCode;
   }
 }
