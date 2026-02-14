@@ -4,9 +4,10 @@ import 'package:reddit_tutorial/core/common/error_text.dart';
 import 'package:reddit_tutorial/core/common/loader.dart';
 import 'package:reddit_tutorial/features/community/repository/controller/community_controller.dart';
 import 'package:reddit_tutorial/model/community_model.dart';
+import 'package:routemaster/routemaster.dart';
 
 class SearchCommunityDelegate extends SearchDelegate {
-  final Ref ref;
+  final WidgetRef ref;
   SearchCommunityDelegate(this.ref);
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -32,7 +33,7 @@ class SearchCommunityDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    ref.watch(searchCommunityProvider(query)).when(
+  return  ref.watch(searchCommunityProvider(query)).when(
       data: (communities) => ListView.builder(
         itemCount: communities.length,
         itemBuilder: (BuildContext context, int index){
@@ -42,9 +43,7 @@ class SearchCommunityDelegate extends SearchDelegate {
               backgroundImage: NetworkImage(community.avatar),
             ),
             title: Text('r/${community.name}'),
-            onTap: (){
-              
-            },
+            onTap: () => navigateToCommunity(context, community.name),
           );
         },
       ),
@@ -52,7 +51,9 @@ class SearchCommunityDelegate extends SearchDelegate {
         error: error.toString(),
       ),
       loading: () => const Loader(),
-    );
-    
+    ); 
+  }
+  void navigateToCommunity(BuildContext context, String communityName) {
+    Routemaster.of(context).push('/r/${communityName}');
   }
 }

@@ -19,11 +19,12 @@ class CommunityRepository {
     try {
       var communityDoc = await _communities.doc(community.name).get();
       if (communityDoc.exists) {
-        throw 'Community with the same name already exists!';
+        return left(Failure('Community with the same name already exists!'));
       }
-      return right(_communities.doc(community.name).set(community.toMap()));
+      await _communities.doc(community.name).set(community.toMap());
+      return right(null);
     } on FirebaseException catch (e) {
-      throw e.message!;
+      return left(Failure(e.message!));
     } catch (e) {
       return left(Failure(e.toString()));
     }
@@ -66,7 +67,7 @@ class CommunityRepository {
               ? null
               : query.substring(0, query.length - 1) +
                   String.fromCharCode(
-                    query.codeUnitAt(query.length - 1) - 1,
+                    query.codeUnitAt(query.length - 1) + 1,
                   ),
         )
         .snapshots()
