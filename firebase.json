@@ -1,1 +1,6 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"reddit-clone-8f849","appId":"1:868295647239:android:cae0f384050705b34b4aa2","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"reddit-clone-8f849","configurations":{"android":"1:868295647239:android:cae0f384050705b34b4aa2","ios":"1:868295647239:ios:bc5c190b6528dd8c4b4aa2"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "flutter": {"platforms":{"android":{"default":{"projectId":"reddit-clone-8f849","appId":"1:868295647239:android:cae0f384050705b34b4aa2","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"reddit-clone-8f849","configurations":{"android":"1:868295647239:android:cae0f384050705b34b4aa2","ios":"1:868295647239:ios:bc5c190b6528dd8c4b4aa2"}}}}}
+}

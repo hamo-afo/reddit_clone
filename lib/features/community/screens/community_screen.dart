@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_tutorial/core/common/error_text.dart';
 import 'package:reddit_tutorial/core/common/loader.dart';
+import 'package:reddit_tutorial/core/constants/constants.dart';
 import 'package:reddit_tutorial/features/auth/controller/auth_controller.dart';
 import 'package:reddit_tutorial/features/community/repository/controller/community_controller.dart';
+import 'package:reddit_tutorial/model/community_model.dart';
 import 'package:routemaster/routemaster.dart';
 
 class CommunityScreen extends ConsumerWidget {
@@ -17,6 +19,12 @@ class CommunityScreen extends ConsumerWidget {
     Routemaster.of(context).push('/mod-tools/$name');
   }
 
+  void joinCommunity(WidgetRef ref, Community community, BuildContext context) {
+    ref
+        .read(communityControllerProvider.notifier)
+        .joinCommunity(community, context);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
@@ -24,19 +32,57 @@ class CommunityScreen extends ConsumerWidget {
       body: ref.watch(getCommunityByNameProvider(name)).when(
             data: (community) => NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) {
+                final bannerUrl = (community.banner.isEmpty ||
+                        community.banner == '')
+                    ? Constants.bannerDefault
+                    : community.banner;
                 return [
                   SliverAppBar(
-                    expandedHeight: 150,
+                    expandedHeight: 180,
                     floating: true,
                     snap: true,
                     flexibleSpace: Stack(
+                      fit: StackFit.expand,
                       children: [
                         Positioned.fill(
                           child: Image.network(
-                            community.banner,
+                            bannerUrl,
                             fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Colors.deepOrange.shade400,
+                                    Colors.orange.shade300,
+                                    Colors.amber.shade200,
+                                  ],
+                                ),
+                              ),
+                            ),
+                            loadingBuilder: (_, child, progress) =>
+                                progress == null
+                                    ? child
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                            colors: [
+                                              Colors.deepOrange.shade400,
+                                              Colors.orange.shade300,
+                                            ],
+                                          ),
+                                        ),
+                                        child: const Center(
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -75,9 +121,7 @@ class CommunityScreen extends ConsumerWidget {
                                       child: const Text('Mod Tools'),
                                     )
                                   : OutlinedButton(
-                                      onPressed: () {
-                                        navigateToModTools(context);
-                                      },
+                                      onPressed: () => joinCommunity(ref, community, context),
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:

@@ -18,9 +18,16 @@ allprojects {
 }
 
 rootProject.buildDir = '../build'
-subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
-    project.evaluationDependsOn(':app')
+subprojects { subproject ->
+    // Only set buildDir when subproject is on the same drive as root (avoids "different roots" on Windows)
+    def rootBuildPath = rootProject.buildDir.toString().replace('\\', '/')
+    def subprojectPath = subproject.projectDir.toString().replace('\\', '/')
+    def rootDrive = rootBuildPath.contains(':') ? rootBuildPath.take(2) : rootBuildPath.split('/')[0]
+    def subDrive = subprojectPath.contains(':') ? subprojectPath.take(2) : subprojectPath.split('/')[0]
+    if (rootDrive == subDrive) {
+        subproject.buildDir = "${rootProject.buildDir}/${subproject.name}"
+    }
+    subproject.evaluationDependsOn(':app')
 }
 
 tasks.register("clean", Delete) {

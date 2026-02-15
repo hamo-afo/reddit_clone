@@ -54,8 +54,8 @@ class Community {
       name: map['name'] as String,
       banner: map['banner'] as String,
       avatar: map['avatar'] as String,
-      members: List<String>.from(map['members'] as List<String>),
-      mods: List<String>.from(map['mods'] as List<String>),
+      members: List<String>.from(map['members'] as List? ?? []),
+      mods: List<String>.from(map['mods'] as List? ?? []),
     );
   }
 

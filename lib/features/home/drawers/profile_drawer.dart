@@ -6,11 +6,16 @@ import 'package:reddit_tutorial/theme/pallet.dart';
 
 class ProfileDrawer extends ConsumerWidget {
   const ProfileDrawer({super.key});
+  void logOut(WidgetRef ref) {
+    ref.read(authControllerProvider.notifier).logout();
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
     return Drawer(
-      child: SafeArea(child: Column(
+      child: SafeArea(
+          child: Column(
         children: [
           CircleAvatar(
             backgroundImage: NetworkImage(user.profilePic),
@@ -29,17 +34,20 @@ class ProfileDrawer extends ConsumerWidget {
           ListTile(
             title: const Text('My Profile'),
             leading: const Icon(Icons.person),
-            onTap: () {} ,
-          ),
-           ListTile(
-            title: const Text('Log Out'),
-            leading:  Icon(Icons.logout,
-            color: Pallete.redColor,),
             onTap: () {},
           ),
-          Switch.adaptive(value: true,
-           onChanged: (val) {},),
-
+          ListTile(
+            title: const Text('Log Out'),
+            leading: Icon(
+              Icons.logout,
+              color: Pallete.redColor,
+            ),
+            onTap: () => logOut(ref),
+          ),
+          Switch.adaptive(
+            value: true,
+            onChanged: (val) {},
+          ),
         ],
       )),
     );
