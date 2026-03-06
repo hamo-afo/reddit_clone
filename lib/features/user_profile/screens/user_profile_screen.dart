@@ -4,13 +4,15 @@ import 'package:reddit_tutorial/core/common/error_text.dart';
 import 'package:reddit_tutorial/core/common/loader.dart';
 import 'package:reddit_tutorial/core/constants/constants.dart';
 import 'package:reddit_tutorial/features/auth/controller/auth_controller.dart';
+import 'package:routemaster/routemaster.dart';
 
 class UserProfileScreen extends ConsumerWidget {
-    final String uid;
+  final String uid;
 
-  const UserProfileScreen({
-    super.key,
-  required this.uid});
+  const UserProfileScreen({super.key, required this.uid});
+  void navigateToEditUser(BuildContext context) {
+    Routemaster.of(context).push('/edit-profile/$uid');
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,10 +21,9 @@ class UserProfileScreen extends ConsumerWidget {
       body: ref.watch(getUserDataProvider(uid)).when(
             data: (user) => NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) {
-                final bannerUrl =
-                    (user.banner.isEmpty || user.banner == '')
-                        ? Constants.bannerDefault
-                        : user.banner;
+                final bannerUrl = (user.banner.isEmpty || user.banner == '')
+                    ? Constants.bannerDefault
+                    : user.banner;
                 return [
                   SliverAppBar(
                     expandedHeight: 180,
@@ -72,26 +73,28 @@ class UserProfileScreen extends ConsumerWidget {
                         ),
                         Container(
                           alignment: Alignment.bottomLeft,
-                          padding: const EdgeInsets.all(20).copyWith(bottom: 70),
+                          padding:
+                              const EdgeInsets.all(20).copyWith(bottom: 70),
                           child: CircleAvatar(
                             backgroundImage: NetworkImage(user.profilePic),
                             radius: 45,
                           ),
                         ),
-                         Container(
-                          alignment: Alignment.bottomLeft ,
+                        Container(
+                          alignment: Alignment.bottomLeft,
                           padding: const EdgeInsets.all(20),
-                           child: OutlinedButton(
-                            onPressed: () {},
+                          child: OutlinedButton(
+                            onPressed: () => navigateToEditUser(context),
                             style: ElevatedButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25),
                             ),
                             child: const Text('Edit Profile'),
-                                                   ),
-                         )
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -100,7 +103,6 @@ class UserProfileScreen extends ConsumerWidget {
                     sliver: SliverList(
                       delegate: SliverChildListDelegate(
                         [
-                          
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -109,8 +111,6 @@ class UserProfileScreen extends ConsumerWidget {
                                 style: const TextStyle(
                                     fontSize: 19, fontWeight: FontWeight.bold),
                               ),
-                             
-                                  
                             ],
                           ),
                           Padding(
