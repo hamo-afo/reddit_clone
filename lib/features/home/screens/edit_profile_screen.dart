@@ -42,7 +42,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     nameController.dispose();
   }
 
-  void selectBannerImage() async {
+   void selectBannerImage() async {
     final res = await pickImage();
     if (res != null) {
       setState(() {
