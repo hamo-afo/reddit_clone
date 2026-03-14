@@ -50,9 +50,10 @@ class CommunityRepository {
 
   FutureVoid editCommunity(Community community) async {
     try {
-      return right(_communities.doc(community.name).update(community.toMap()));
+      await _communities.doc(community.name).update(community.toMap());
+      return right(null);
     } on FirebaseException catch (e) {
-      throw e.message!;
+      return left(Failure(e.message ?? 'Failed to edit community'));
     } catch (e) {
       return left(Failure(e.toString()));
     }
@@ -60,29 +61,29 @@ class CommunityRepository {
 
   FutureVoid joinCommunity(String communityName, String userId) async {
     try {
-      return right(_communities.doc(communityName).update({
-        'members' : FieldValue.arrayUnion([userId]),
-      }));
-
+      await _communities.doc(communityName).update({
+        'members': FieldValue.arrayUnion([userId]),
+      });
+      return right(null);
     } on FirebaseException catch (e) {
-      throw e.message!;
+      return left(Failure(e.message ?? 'Failed to join community'));
     } catch (e) {
       return left(Failure(e.toString()));
     }
   }
-   FutureVoid leaveCommunity(String communityName, String userId) async {
+
+  FutureVoid leaveCommunity(String communityName, String userId) async {
     try {
-      return right(_communities.doc(communityName).update({
+      await _communities.doc(communityName).update({
         'members': FieldValue.arrayRemove([userId]),
-      }));
+      });
+      return right(null);
     } on FirebaseException catch (e) {
-      throw e.message!;
+      return left(Failure(e.message ?? 'Failed to leave community'));
     } catch (e) {
       return left(Failure(e.toString()));
     }
   }
-
- 
 
   Stream<List<Community>> searchCommunity(String query) {
     return _communities
