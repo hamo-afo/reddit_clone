@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 
 class Post {
@@ -93,21 +91,20 @@ class Post {
       id: map['id'] as String,
       title: map['title'] as String,
       link: map['link'] != null ? map['link'] as String : null,
-      description: map['description'] != null ? map['description'] as String : null,
+      description:
+          map['description'] != null ? map['description'] as String : null,
       communityName: map['communityName'] as String,
       communityProfilePic: map['communityProfilePic'] as String,
-      upvotes: List<String>.from((map['upvotes'] as List<String>)),
-      downvotes: List<String>.from((map['downvotes'] as List<String>)),
+      upvotes: List<String>.from((map['upvotes'] as List<dynamic>)),
+      downvotes: List<String>.from((map['downvotes'] as List<dynamic>)),
       commentCount: map['commentCount'] as int,
       username: map['username'] as String,
       uid: map['uid'] as String,
       type: map['type'] as String,
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt'] as int),
-      awards: List<String>.from((map['awards'] as List<String>)),
+      awards: List<String>.from((map['awards'] as List<dynamic>)),
     );
   }
-
- 
 
   @override
   String toString() {
@@ -117,39 +114,38 @@ class Post {
   @override
   bool operator ==(covariant Post other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.title == title &&
-      other.link == link &&
-      other.description == description &&
-      other.communityName == communityName &&
-      other.communityProfilePic == communityProfilePic &&
-      listEquals(other.upvotes, upvotes) &&
-      listEquals(other.downvotes, downvotes) &&
-      other.commentCount == commentCount &&
-      other.username == username &&
-      other.uid == uid &&
-      other.type == type &&
-      other.createdAt == createdAt &&
-      listEquals(other.awards, awards);
+
+    return other.id == id &&
+        other.title == title &&
+        other.link == link &&
+        other.description == description &&
+        other.communityName == communityName &&
+        other.communityProfilePic == communityProfilePic &&
+        listEquals(other.upvotes, upvotes) &&
+        listEquals(other.downvotes, downvotes) &&
+        other.commentCount == commentCount &&
+        other.username == username &&
+        other.uid == uid &&
+        other.type == type &&
+        other.createdAt == createdAt &&
+        listEquals(other.awards, awards);
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      title.hashCode ^
-      link.hashCode ^
-      description.hashCode ^
-      communityName.hashCode ^
-      communityProfilePic.hashCode ^
-      upvotes.hashCode ^
-      downvotes.hashCode ^
-      commentCount.hashCode ^
-      username.hashCode ^
-      uid.hashCode ^
-      type.hashCode ^
-      createdAt.hashCode ^
-      awards.hashCode;
+        title.hashCode ^
+        link.hashCode ^
+        description.hashCode ^
+        communityName.hashCode ^
+        communityProfilePic.hashCode ^
+        upvotes.hashCode ^
+        downvotes.hashCode ^
+        commentCount.hashCode ^
+        username.hashCode ^
+        uid.hashCode ^
+        type.hashCode ^
+        createdAt.hashCode ^
+        awards.hashCode;
   }
 }
