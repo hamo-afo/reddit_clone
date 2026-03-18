@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Proposal - Blog Application</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 24mm 18mm 24mm 18mm;
+    }
+
+    body {
+      font-family: "Times New Roman", Georgia, serif;
+      line-height: 1.45;
+      color: #111;
+      font-size: 12pt;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+    }
+
+    h1 {
+      font-size: 20pt;
+      text-align: center;
+      margin: 0 0 14px 0;
+    }
+
+    h2 {
+      font-size: 14pt;
+      margin: 18px 0 8px 0;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 4px;
+    }
+
+    p {
+      margin: 8px 0;
+      text-align: justify;
+    }
+
+    ul {
+      margin: 6px 0 8px 22px;
+    }
+
+    li {
+      margin: 4px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+      font-size: 11.5pt;
+    }
+
+    th,
+    td {
+      border: 1px solid #444;
+      padding: 8px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f2f2f2;
+      text-align: left;
+    }
+
+    .subtitle {
+      text-align: center;
+      margin-bottom: 18px;
+      font-size: 12pt;
+    }
+  </style>
+</head>
+<body>
+  <h1>Project Proposal</h1>
+  <div class="subtitle">Blog Application using Flutter with Clean Architecture</div>
+
+  <h2>1. Project Title</h2>
+  <p>Blog Application using Flutter with Clean Architecture and Supabase Backend</p>
+
+  <h2>2. Introduction</h2>
+  <p>
+    With the rapid growth of digital platforms, blogging has become an important medium for sharing knowledge,
+    experiences, and opinions. A blog application allows users to create, publish, and manage written content while
+    enabling readers to explore and interact with posts.
+  </p>
+  <p>
+    This project aims to develop a cross-platform Blog Application using Flutter that allows users to create accounts,
+    write blogs, view posts, and manage their content efficiently. The application will follow Clean Architecture
+    principles to ensure maintainability, scalability, and separation of concerns.
+  </p>
+  <p>
+    The system will also implement modern development practices such as SOLID principles, state management using
+    Bloc/Cubit, dependency injection, and cloud backend integration using Supabase.
+  </p>
+
+  <h2>3. Problem Statement</h2>
+  <p>
+    Many basic blog applications are developed without proper architecture, making them difficult to maintain, scale,
+    or extend in the future. Poor separation of logic, UI, and data layers leads to complex and tightly coupled code.
+  </p>
+  <p>
+    This project aims to solve this problem by developing a well-structured blog application using Clean Architecture,
+    ensuring modular design, easy testing, and maintainability.
+  </p>
+
+  <h2>4. Objectives</h2>
+  <p>The main objectives of this project are:</p>
+  <ul>
+    <li>To develop a mobile blog application using Flutter.</li>
+    <li>To implement Clean Architecture for better code organization.</li>
+    <li>To apply SOLID principles in application design.</li>
+    <li>To implement Bloc and Cubit state management for handling UI states.</li>
+    <li>To integrate a Supabase backend for authentication and database management.</li>
+    <li>To use Dependency Injection using get_it to manage dependencies efficiently.</li>
+    <li>To allow users to create, read, update, and manage blog posts.</li>
+  </ul>
+
+  <h2>5. Proposed System</h2>
+  <p>The proposed system is a Flutter-based Blog Application where users can:</p>
+  <ul>
+    <li>Register and log in to their accounts.</li>
+    <li>Create and publish blog posts.</li>
+    <li>View blogs written by other users.</li>
+    <li>Edit or delete their own blog posts.</li>
+    <li>Read blogs in a structured and user-friendly interface.</li>
+  </ul>
+  <p>
+    The application will follow Clean Architecture, dividing the project into multiple layers:
+  </p>
+  <ul>
+    <li>Presentation Layer - UI and state management using Bloc/Cubit.</li>
+    <li>Domain Layer - Business logic and use cases.</li>
+    <li>Data Layer - API calls, database interaction, and repositories.</li>
+  </ul>
+  <p>
+    This layered architecture ensures that each component of the system has a clear responsibility.
+  </p>
+
+  <h2>6. Key Features</h2>
+  <p>The blog application will include the following features:</p>
+  <ul>
+    <li>User Authentication (Signup/Login)</li>
+    <li>Create Blog Posts</li>
+    <li>View Blog Posts</li>
+    <li>Edit/Delete Posts</li>
+    <li>Blog Listing Page</li>
+    <li>Detailed Blog Reading Page</li>
+    <li>Responsive UI Design</li>
+    <li>Cloud Backend Integration</li>
+  </ul>
+
+  <h2>7. Technologies and Tools</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Technology</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Flutter</td>
+        <td>Cross-platform mobile app development</td>
+      </tr>
+      <tr>
+        <td>Dart</td>
+        <td>Programming language used in Flutter</td>
+      </tr>
+      <tr>
+        <td>Supabase</td>
+        <td>Backend as a Service (Authentication + Database)</td>
+      </tr>
+      <tr>
+        <td>Bloc / Cubit</td>
+        <td>State management</td>
+      </tr>
+      <tr>
+        <td>Clean Architecture</td>
+        <td>Structured application design</td>
+      </tr>
+      <tr>
+        <td>SOLID Principles</td>
+        <td>Maintainable and scalable code</td>
+      </tr>
+      <tr>
+        <td>get_it</td>
+        <td>Dependency Injection</td>
+      </tr>
+      <tr>
+        <td>Git &amp; GitHub</td>
+        <td>Version control</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>8. System Architecture</h2>
+  <p>
+    The application will follow Clean Architecture, which separates the system into three main layers:
+  </p>
+  <p><strong>Presentation Layer</strong></p>
+  <ul>
+    <li>Flutter UI</li>
+    <li>Bloc/Cubit state management</li>
+  </ul>
+  <p><strong>Domain Layer</strong></p>
+  <ul>
+    <li>Business logic</li>
+    <li>Use cases</li>
+    <li>Entities</li>
+  </ul>
+  <p><strong>Data Layer</strong></p>
+  <ul>
+    <li>Repository implementations</li>
+    <li>Supabase database communication</li>
+    <li>Models and data sources</li>
+  </ul>
+  <p>
+    This architecture improves testability, scalability, and maintainability.
+  </p>
+
+  <h2>9. Expected Outcomes</h2>
+  <p>At the end of this project:</p>
+  <ul>
+    <li>A fully functional Flutter Blog Application will be developed.</li>
+    <li>The application will demonstrate Clean Architecture implementation.</li>
+    <li>It will showcase modern Flutter development practices.</li>
+    <li>Users will be able to create and read blog posts through a cloud-based backend system.</li>
+  </ul>
+
+  <h2>10. Conclusion</h2>
+  <p>
+    This project will demonstrate the implementation of modern software development practices in mobile application
+    development. By using Flutter, Clean Architecture, SOLID principles, and Supabase, the system will be scalable,
+    maintainable, and efficient.
+  </p>
+  <p>
+    The project will not only provide a functional blogging platform but also serve as a practical example of applying
+    professional software architecture patterns in Flutter development.
+  </p>
+</body>
+</html>

@@ -5,7 +5,8 @@ import 'package:reddit_tutorial/features/community/screens/community_screen.dart
 import 'package:reddit_tutorial/features/community/screens/create_community_screen.dart';
 import 'package:reddit_tutorial/features/community/screens/edit_community_screen.dart';
 import 'package:reddit_tutorial/features/community/screens/mod_tools_screen.dart';
-import 'package:reddit_tutorial/features/home/screens/edit_profile_screen.dart';
+import 'package:reddit_tutorial/features/post/screens/comments_screen.dart';
+import 'package:reddit_tutorial/features/user_profile/screens/edit_profile_screen.dart';
 import 'package:reddit_tutorial/features/home/screens/home_screen.dart';
 import 'package:reddit_tutorial/features/post/screens/add_post_type_screen.dart';
 import 'package:reddit_tutorial/features/user_profile/screens/user_profile_screen.dart';
@@ -50,6 +51,11 @@ final loggedInRoute = RouteMap(routes: {
           type: routeData.pathParameters['type']!,
         ),
       ),
+      '/post/:postId/comments': (route) => MaterialPage(
+        child: CommentsScreen(
+          postId: route.pathParameters['postId']!, 
+        ),
+         ),
       
 
 

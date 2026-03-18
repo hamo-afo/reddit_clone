@@ -10,6 +10,7 @@ import 'package:reddit_tutorial/core/utils.dart';
 import 'package:reddit_tutorial/features/auth/controller/auth_controller.dart';
 import 'package:reddit_tutorial/features/community/repository/community_repository.dart';
 import 'package:reddit_tutorial/model/community_model.dart';
+import 'package:reddit_tutorial/model/post_model.dart';
 import 'package:routemaster/routemaster.dart';
 
 final userCommunitiesProvider = StreamProvider((ref) {
@@ -35,6 +36,9 @@ final getCommunityByNameProvider = StreamProvider.family((ref, String name) {
 });
 final searchCommunityProvider = StreamProvider.family((ref, String name) {
   return ref.watch(communityControllerProvider.notifier).searchCommunity(name);
+});
+final getCommunityPostsProvider = StreamProvider.family((ref, String name) {
+  return ref.read(communityControllerProvider.notifier).getCommunityPosts(name);
 });
 
 class CommunityController extends StateNotifier<bool> {
@@ -87,7 +91,7 @@ class CommunityController extends StateNotifier<bool> {
     state = true;
     if (profileFile != null) {
       final res = await _storageRepository.storeFile(
-        path: 'communities/profie',
+        path: 'communities/profile',
         id: community.name,
         file: profileFile,
       );
@@ -145,5 +149,18 @@ class CommunityController extends StateNotifier<bool> {
       (l) => showSnackBar(context, l.message),
       (r) => showSnackBar(context, 'Left r/${community.name}'),
     );
+  }
+
+  void addMods(
+      String communityName, List<String> uids, BuildContext context) async {
+    final res = await _communityRepository.addMods(communityName, uids);
+    res.fold(
+      (l) => showSnackBar(context, l.message),
+      (r) => Routemaster.of(context).pop(),
+    );
+  }
+
+  Stream<List<Post>> getCommunityPosts(String name) {
+    return _communityRepository.getCommunityPosts(name);
   }
 }

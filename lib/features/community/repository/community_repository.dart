@@ -6,6 +6,7 @@ import 'package:reddit_tutorial/core/failure.dart';
 import 'package:reddit_tutorial/core/providers/firebase_providers.dart';
 import 'package:reddit_tutorial/core/type_defs.dart';
 import 'package:reddit_tutorial/model/community_model.dart';
+import 'package:reddit_tutorial/model/post_model.dart';
 
 final communityRepositoryProvider = Provider((ref) {
   return CommunityRepository(firestore: ref.watch(firestoreProvider));
@@ -109,6 +110,38 @@ class CommunityRepository {
       },
     );
   }
+
+  FutureVoid addMods(String communityName, List<String> uids) async {
+    try {
+      await _communities.doc(communityName).update({
+        'mods': FieldValue.arrayUnion(uids),
+      });
+      return right(null);
+    } on FirebaseException catch (e) {
+      return left(Failure(e.message ?? 'Failed to add mods'));
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  Stream<List<Post>> getCommunityPosts(String name) {
+    return _posts
+        .where('communityName', isEqualTo: name)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
+          (event) => event.docs
+              .map(
+                (e) => Post.fromMap(
+                  e.data() as Map<String, dynamic>,
+                ),
+              )
+              .toList(),
+        );
+  }
+
+  CollectionReference get _posts =>
+      _firestore.collection(FirebaseConstants.postsCollection);
 
   CollectionReference get _communities =>
       _firestore.collection(FirebaseConstants.communitiesCollection);
