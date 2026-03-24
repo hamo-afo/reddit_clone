@@ -29,6 +29,12 @@ class PostCard extends ConsumerWidget {
     ref.read(postControllerProvider.notifier).downvote(post);
   }
 
+  void awardPost(WidgetRef ref, String award, BuildContext context) async {
+    ref
+        .read(postControllerProvider.notifier)
+        .awardPost(post: post, award: award, context: context);
+  }
+
   void navigateToUser(BuildContext context) {
     Routemaster.of(context).push('/u/${post.uid}');
   }
@@ -47,6 +53,7 @@ class PostCard extends ConsumerWidget {
     final isTypeText = post.type == 'text';
     final isTypeLink = post.type == 'link';
     final user = ref.watch(userProvider)!;
+    final isGuest = !user.isAuthenticated;
 
     final currentTheme = ref.watch(themeNotifierProvider);
     return Column(
@@ -118,6 +125,29 @@ class PostCard extends ConsumerWidget {
                             ),
                         ],
                       ),
+                      if (post.awards.isNotEmpty) ...[
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        SizedBox(
+                          height: 25,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: post.awards.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final award = post.awards[index];
+                              final awardPath = Constants.awards[award];
+                              if (awardPath == null) {
+                                return const SizedBox();
+                              }
+                              return Image.asset(
+                                awardPath,
+                                height: 23,
+                              );
+                            },
+                          ),
+                        )
+                      ],
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
                         child: Text(
@@ -159,111 +189,121 @@ class PostCard extends ConsumerWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              IconButton(
-                                onPressed: () => upvotePost(ref),
-                                icon: Icon(
-                                  Constants.up,
-                                  size: 30,
-                                  color: post.upvotes.contains(user.uid)
-                                      ? Pallete.redColor
-                                      : null,
+                          Flexible(
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: isGuest ? () {} : () => upvotePost(ref),
+                                  icon: Icon(
+                                    Constants.up,
+                                    size: 30,
+                                    color: post.upvotes.contains(user.uid)
+                                        ? Pallete.redColor
+                                        : null,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '${post.upvotes.length - post.downvotes.length == 0 ? 'Vote' : post.upvotes.length - post.downvotes.length}',
-                                style: const TextStyle(fontSize: 17),
-                              ),
-                              IconButton(
-                                onPressed: () => downvotePost(ref),
-                                icon: Icon(
-                                  Constants.down,
-                                  size: 30,
-                                  color: post.downvotes.contains(user.uid)
-                                      ? Pallete.blueColor
-                                      : null,
+                                Text(
+                                  '${post.upvotes.length - post.downvotes.length == 0 ? 'Vote' : post.upvotes.length - post.downvotes.length}',
+                                  style: const TextStyle(fontSize: 17),
                                 ),
-                              ),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () => navigateToComments(context),
-                                    icon: const Icon(
-                                      Icons.comment,
+                                IconButton(
+                                  onPressed: isGuest ? () {} : () => downvotePost(ref),
+                                  icon: Icon(
+                                    Constants.down,
+                                    size: 30,
+                                    color: post.downvotes.contains(user.uid)
+                                        ? Pallete.blueColor
+                                        : null,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () =>
+                                          navigateToComments(context),
+                                      icon: const Icon(
+                                        Icons.comment,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    '${post.commentCount == 0 ? 'Comment' : post.commentCount}',
-                                    style: const TextStyle(fontSize: 17),
-                                  ),
-                                ],
-                              ),
-                              ref
-                                  .watch(getCommunityByNameProvider(
-                                      post.communityName))
-                                  .when(
-                                    data: (data) {
-                                      if (data.mods.contains(user.uid)) {
-                                        return IconButton(
-                                          onPressed: () => deletePost(ref, context),
-                                          icon: const Icon(
-                                            Icons.admin_panel_settings,
-                                          ),
-                                        );
-                                      } else {
-                                        return const SizedBox();
-                                      }
-                                    },
-                                    error: (error, stackTrace) => ErrorText(
-                                      error: error.toString(),
+                                    Text(
+                                      '${post.commentCount == 0 ? 'Comment' : post.commentCount}',
+                                      style: const TextStyle(fontSize: 17),
                                     ),
-                                    loading: () => const Loader(),
-                                  ),
-                            ],
+                                  ],
+                                ),
+                                ref
+                                    .watch(getCommunityByNameProvider(
+                                        post.communityName))
+                                    .when(
+                                      data: (data) {
+                                        if (data.mods.contains(user.uid)) {
+                                          return IconButton(
+                                            onPressed: () =>
+                                                deletePost(ref, context),
+                                            icon: const Icon(
+                                              Icons.admin_panel_settings,
+                                            ),
+                                          );
+                                        } else {
+                                          return const SizedBox();
+                                        }
+                                      },
+                                      error: (error, stackTrace) => ErrorText(
+                                        error: error.toString(),
+                                      ),
+                                      loading: () => const Loader(),
+                                    ),
+                              ],
+                            ),
                           ),
                           IconButton(
-                            onPressed: () {
+                            onPressed: isGuest ? () {} : () {
                               showDialog(
-                                context:  context,
+                                context: context,
                                 builder: (context) => Dialog(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: GridView.builder(
-                                      shrinkWrap: true,
-                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 4,),
-                                    itemCount: user.awards.length, 
-                                    itemBuilder: (BuildContext context, int index){
-                                      final award = user.awards[index];
-
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.asset(Constants.awards[award]!),
-                                      );
-
-                                    },
-                                    ), ),
+                                      padding: const EdgeInsets.all(20),
+                                      child: GridView.builder(
+                                        shrinkWrap: true,
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 4,
+                                        ),
+                                        itemCount: user.awards.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          final award = user.awards[index];
+                                          final awardPath =
+                                              Constants.awards[award];
+                                          if (awardPath == null) {
+                                            return const SizedBox();
+                                          }
+                                          return GestureDetector(
+                                            onTap: () =>
+                                                awardPost(ref, award, context),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Image.asset(awardPath),
+                                            ),
+                                          );
+                                        },
+                                      )),
                                 ),
-
-                              ); 
+                              );
                             },
                             icon: const Icon(Icons.card_giftcard_outlined),
-                            )
-
-
-
+                          )
                         ],
                       ),
                     ],
                   ),
                 ),
-               
               ]))
             ],
           ),
         ),
-         const SizedBox(
+        const SizedBox(
           height: 10,
         ),
       ],

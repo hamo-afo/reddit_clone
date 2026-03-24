@@ -29,14 +29,15 @@ class CommunityScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider)!;
+    final isGuest = !user.isAuthenticated;
     return Scaffold(
       body: ref.watch(getCommunityByNameProvider(name)).when(
             data: (community) => NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) {
-                final bannerUrl = (community.banner.isEmpty ||
-                        community.banner == '')
-                    ? Constants.bannerDefault
-                    : community.banner;
+                final bannerUrl =
+                    (community.banner.isEmpty || community.banner == '')
+                        ? Constants.bannerDefault
+                        : community.banner;
                 return [
                   SliverAppBar(
                     expandedHeight: 180,
@@ -108,6 +109,7 @@ class CommunityScreen extends ConsumerWidget {
                                 style: const TextStyle(
                                     fontSize: 19, fontWeight: FontWeight.bold),
                               ),
+                              if(!isGuest)
                               community.mods.contains(user.uid)
                                   ? OutlinedButton(
                                       onPressed: () {},
@@ -122,7 +124,8 @@ class CommunityScreen extends ConsumerWidget {
                                       child: const Text('Mod Tools'),
                                     )
                                   : OutlinedButton(
-                                      onPressed: () => joinCommunity(ref, community, context),
+                                      onPressed: () => joinCommunity(
+                                          ref, community, context),
                                       style: ElevatedButton.styleFrom(
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
@@ -148,7 +151,7 @@ class CommunityScreen extends ConsumerWidget {
                   )
                 ];
               },
-              body:  ref.watch(getCommunityPostsProvider(name)).when(
+              body: ref.watch(getCommunityPostsProvider(name)).when(
                     data: (data) {
                       return ListView.builder(
                         itemCount: data.length,
@@ -168,7 +171,6 @@ class CommunityScreen extends ConsumerWidget {
             error: (error, stackTrace) => ErrorText(error: error.toString()),
             loading: () => const Loader(),
           ),
-            );
-           
+    );
   }
 }

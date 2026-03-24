@@ -32,18 +32,24 @@ class UserProfileRepository {
       return left(Failure(e.toString()));
     }
   }
+
   Stream<List<Post>> getUserPosts(String uid) {
-    return _posts.where('uid', isEqualTo: uid).orderBy('createdAt', descending: true).snapshots().map(
-      (event) => event.docs
-      .map(
-        (e) => Post.fromMap(
-          e.data() as Map<String, dynamic>,
-    ),
-    )
-    .toList(),
-    );
-    
+    return _posts
+        .where('uid', isEqualTo: uid)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .distinct()
+        .map(
+          (event) => event.docs
+              .map(
+                (e) => Post.fromMap(
+                  e.data() as Map<String, dynamic>,
+                ),
+              )
+              .toList(),
+        );
   }
+
   FutureVoid updateUserKarma(UserModel user) async {
     try {
       return right(_users.doc(user.uid).update({
@@ -55,5 +61,4 @@ class UserProfileRepository {
       return left(Failure(e.toString()));
     }
   }
-
 }

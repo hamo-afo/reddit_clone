@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_tutorial/core/common/loader.dart';
+import 'package:reddit_tutorial/core/common/sign_in_button.dart';
+import 'package:reddit_tutorial/features/auth/controller/auth_controller.dart';
 import 'package:reddit_tutorial/features/community/repository/controller/community_controller.dart';
 
 class CreateCommunityScreen extends ConsumerStatefulWidget {
@@ -31,47 +33,71 @@ class _CreateCommunityScreenState extends ConsumerState<CreateCommunityScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(communityControllerProvider);
+    final user = ref.watch(userProvider);
+    final isGuest = user?.name == 'Guest';
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create a community'),
       ),
       body: isLoading
           ? const Loader()
-          : Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  const Align(
-                      alignment: Alignment.topLeft,
-                      child: Text('Community name')),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: communityNameController,
-                    decoration: const InputDecoration(
-                      hintText: 'r/Community_name',
-                      filled: true,
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(18),
+          : isGuest
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(18.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Sign in to create a community',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 30),
+                        SignInButton(isFromLogin: true),
+                      ],
                     ),
-                    maxLength: 21,
                   ),
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                    onPressed: createCommunity,
-                    style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        )),
-                    child: const Text(
-                      'Create community',
-                      style: TextStyle(
-                        fontSize: 17,
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('Community name')),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: communityNameController,
+                        decoration: const InputDecoration(
+                          hintText: 'r/Community_name',
+                          filled: true,
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.all(18),
+                        ),
+                        maxLength: 21,
                       ),
-                    ),
-                  )
-                ],
-              )),
+                      const SizedBox(height: 30),
+                      ElevatedButton(
+                        onPressed: createCommunity,
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(double.infinity, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            )),
+                        child: const Text(
+                          'Create community',
+                          style: TextStyle(
+                            fontSize: 17,
+                          ),
+                        ),
+                      )
+                    ],
+                  )),
     );
   }
 }

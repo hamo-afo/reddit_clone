@@ -35,6 +35,7 @@ class CommunityRepository {
     return _communities
         .where('members', arrayContains: uid)
         .snapshots()
+        .distinct()
         .map((event) {
       List<Community> communities = [];
       for (var doc in event.docs) {
@@ -45,8 +46,13 @@ class CommunityRepository {
   }
 
   Stream<Community> getCommunityByName(String name) {
-    return _communities.doc(name).snapshots().map(
-        (event) => Community.fromMap(event.data() as Map<String, dynamic>));
+    return _communities
+        .doc(name)
+        .snapshots()
+        .distinct()
+        .where((event) => event.exists && event.data() != null)
+        .map(
+            (event) => Community.fromMap(event.data() as Map<String, dynamic>));
   }
 
   FutureVoid editCommunity(Community community) async {
@@ -99,6 +105,7 @@ class CommunityRepository {
                   ),
         )
         .snapshots()
+        .distinct()
         .map(
       (event) {
         List<Community> communities = [];
@@ -129,6 +136,7 @@ class CommunityRepository {
         .where('communityName', isEqualTo: name)
         .orderBy('createdAt', descending: true)
         .snapshots()
+        .distinct()
         .map(
           (event) => event.docs
               .map(
