@@ -42,10 +42,64 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Secrets & API keys (never commit these)
+# Secrets & API keys (NEVER commit these - security risk!)
 android/app/google-services.json
 lib/firebase_options.dart
 .env
 .env.*
+.env.local
+.secrets
+secrets.json
 *.keystore
 !*.keystore.example
+
+# Android sensitive files
+android/local.properties
+android/app/release.keystore
+android/.gradle/
+android/gradlew
+android/gradlew.bat
+
+# iOS/macOS sensitive files
+ios/.symlinks/
+ios/Flutter/Flutter.podspec
+ios/Pods/
+ios/Podfile.lock
+
+# macOS
+macos/Flutter/Flutter.podspec
+macos/Flutter/ephemeral/
+macos/Pods/
+macos/Podfile.lock
+
+# Firebase related
+firebase-debug.log
+firestore-debug.log
+.firebase/
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Build & generated files
+build/
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec.lock
+
+# Environment & local files
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Backup files
+*.bak
+*.swp
+*~
